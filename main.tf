@@ -15,16 +15,27 @@ resource "oci_core_route_table" "main" {
   defined_tags  = var.defined_tags
   freeform_tags = local.merged_freeform_tags
 
-  /*   dynamic "route_rules" {
-    for_each  = var.route_rules
+  # rules to drg
+  dynamic "route_rules" {
+    for_each = can(var.rules.drg_rules) ? { for idx, obj in var.rules.drg_rules : tostring(idx) => obj } : {}
     content {
-      #network_entity_id = lookup(route_rules.value, "network_entity_id", "")
-      network_entity_id = route_rules.value["type"] == "drg" ? var.drg_id : ""
+      network_entity_id = data.oci_core_drgs.drg[route_rules.key].drgs[0].id
       destination       = lookup(route_rules.value, "destination", "")
-      destination_type  = lookup(route_rules.value, "destination_type", "CIDR_BLOCK")
+      destination_type  = "CIDR_BLOCK"
+      description       = lookup(route_rules.value, "description", "")
     }
-  } */
+  }
 
+  # rules to internet gateway
+  dynamic "route_rules" {
+    for_each = can(var.rules.ig_rules) ? { for idx, obj in var.rules.ig_rules : tostring(idx) => obj } : {}
+    content {
+      network_entity_id = data.oci_core_internet_gateways.ig[route_rules.key].gateways[0].id
+      destination       = lookup(route_rules.value, "destination", "")
+      destination_type  = "CIDR_BLOCK"
+      description       = lookup(route_rules.value, "description", "")
+    }
+  }
 }
 
 resource "oci_core_route_table_attachment" "main" {

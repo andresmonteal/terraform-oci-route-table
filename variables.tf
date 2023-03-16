@@ -38,8 +38,8 @@ variable "defined_tags" {
   type        = map(any)
 }
 
-/* variable "route_rules" {
-  description = "Regras de Roteamento"
-  default     = [{ network_entity_id = "", destination = "", destination_type = null }]
-  type        = list(any)
-} */
+variable "rules" {
+  description = "(Optional) (Updatable) The collection of rules used for routing destination IPs to network devices."
+  default     = {}
+  type        = map(any)
+}
