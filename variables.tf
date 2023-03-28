@@ -8,10 +8,10 @@ variable "subnet_name" {
   type        = string
 }
 
-variable "subnet_id" {
+variable "subnet_ids" {
   description = "(Required) The OCID of the subnet."
-  default     = ""
-  type        = string
+  default     = []
+  type        = list(string)
 }
 
 variable "vcn_id" {

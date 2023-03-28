@@ -39,6 +39,8 @@ resource "oci_core_route_table" "main" {
 }
 
 resource "oci_core_route_table_attachment" "main" {
-  subnet_id      = var.subnet_id == null ? data.oci_core_subnets.subnets.subnets[0].id : var.subnet_id
+  for_each = {for idx, obj in var.subnet_ids : tostring(idx) => obj} 
+
+  subnet_id      = each.value
   route_table_id = oci_core_route_table.main.id
 }

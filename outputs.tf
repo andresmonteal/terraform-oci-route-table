@@ -43,14 +43,3 @@ output "display_name" {
   description = "Nome de Exibição do recurso"
   value       = oci_core_route_table.main.display_name
 }
-
-
-output "subnet_id" {
-  description = "Subnet ID do recurso"
-  value       = oci_core_route_table_attachment.main.*.subnet_id
-}
-
-output "route_table_id" {
-  description = "Route Table ID"
-  value       = oci_core_route_table_attachment.main.*.route_table_id
-}
