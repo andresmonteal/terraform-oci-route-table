@@ -36,6 +36,17 @@ resource "oci_core_route_table" "main" {
       description       = lookup(route_rules.value, "description", "")
     }
   }
+
+  # rules to service gateway
+  dynamic "route_rules" {
+    for_each = can(var.rules.sg_rules) ? { for idx, obj in var.rules.sg_rules : tostring(idx) => obj } : {}
+    content {
+      network_entity_id = data.oci_core_service_gateways.sg[route_rules.key].service_gateways[0].id
+      destination       = lookup(route_rules.value, "destination", "cidr_block")
+      destination_type  = "SERVICE_CIDR_BLOCK"
+      description       = lookup(route_rules.value, "description", "")
+    }
+  }
 }
 
 resource "oci_core_route_table_attachment" "main" {

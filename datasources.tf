@@ -24,3 +24,12 @@ data "oci_core_internet_gateways" "ig" {
   #Optional
   display_name = each.value["ig_name"]
 }
+
+data "oci_core_service_gateways" "sg" {
+  for_each = can(var.rules.sg_rules) ? { for idx, obj in var.rules.sg_rules : tostring(idx) => obj } : {}
+  #Required
+  compartment_id = var.compartment_id
+
+  #Optional
+  display_name = each.value["sg_name"]
+}
