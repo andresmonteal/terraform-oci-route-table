@@ -31,5 +31,8 @@ data "oci_core_service_gateways" "sg" {
   compartment_id = var.compartment_id
 
   #Optional
-  display_name = each.value["sg_name"]
+  filter {
+    name   = "display_name"
+    values = [each.value["sg_name"]]
+  }
 }
