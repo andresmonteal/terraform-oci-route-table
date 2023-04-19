@@ -31,7 +31,7 @@ resource "oci_core_route_table" "main" {
     for_each = can(var.rules.ig_rules) ? { for idx, obj in var.rules.ig_rules : tostring(idx) => obj } : {}
     content {
       network_entity_id = data.oci_core_internet_gateways.ig[route_rules.key].gateways[0].id
-      destination       = lookup(route_rules.value, "destination", "")
+      destination       = lookup(data.oci_core_services.all_oci_services[0].services[0], "cidr_block")
       destination_type  = "CIDR_BLOCK"
       description       = lookup(route_rules.value, "description", "")
     }
@@ -42,7 +42,7 @@ resource "oci_core_route_table" "main" {
     for_each = can(var.rules.sg_rules) ? { for idx, obj in var.rules.sg_rules : tostring(idx) => obj } : {}
     content {
       network_entity_id = data.oci_core_service_gateways.sg[route_rules.key].service_gateways[0].id
-      destination       = lookup(route_rules.value, "destination", "cidr_block")
+      destination       = lookup(route_rules.value, "destination")
       destination_type  = "SERVICE_CIDR_BLOCK"
       description       = lookup(route_rules.value, "description", "")
     }

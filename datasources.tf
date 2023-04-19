@@ -36,3 +36,13 @@ data "oci_core_service_gateways" "sg" {
     values = [each.value["sg_name"]]
   }
 }
+
+data "oci_core_services" "all_oci_services" {
+ 
+  filter {
+    name   = "name"
+    values = ["All .* Services In Oracle Services Network"]
+    regex  = true
+  }
+  count = can(var.rules.sg_rules) ? 1 : 0
+}
