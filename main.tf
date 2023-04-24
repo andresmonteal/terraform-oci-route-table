@@ -50,7 +50,7 @@ resource "oci_core_route_table" "main" {
 }
 
 resource "oci_core_route_table_attachment" "main" {
-  for_each = {for idx, obj in var.subnet_ids : tostring(idx) => obj} 
+  for_each = { for idx, obj in var.subnet_ids : tostring(idx) => obj }
 
   subnet_id      = each.value
   route_table_id = oci_core_route_table.main.id
