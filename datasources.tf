@@ -18,6 +18,7 @@ data "oci_identity_compartments" "compartment" {
 }
 
 data "oci_core_subnets" "subnets" {
+  count = var.tenancy_ocid == null ? 0 : 1
   #Required
   compartment_id = local.compartment_id
 
