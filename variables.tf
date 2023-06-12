@@ -1,5 +1,21 @@
+// Copyright (c) 2018, 2021, Oracle and/or its affiliates.
+
+variable "tenancy_ocid" {
+  description = "(Required) (Updatable) The OCID of the root compartment."
+  type        = string
+  default     = null
+}
+
 variable "compartment_id" {
-  description = "(Required) (Updatable) The OCID of the compartment to contain the route table."
+  description = "compartment id where to create all resources"
+  type        = string
+  default     = null
+}
+
+variable "compartment" {
+  description = "compartment name where to create all resources"
+  type        = string
+  default     = null
 }
 
 variable "subnet_name" {

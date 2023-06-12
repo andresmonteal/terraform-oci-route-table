@@ -4,11 +4,13 @@ locals {
     module      = "oracle-terraform-oci-route-table"
   }
   merged_freeform_tags = merge(var.freeform_tags, local.default_freeform_tags)
+  vcn_id               = try(data.oci_core_subnets.subnets.subnets[0].vcn_id, var.vcn_id)
+  compartment_id       = try(data.oci_identity_compartments.compartment[0].compartments[0].id, var.compartment_id)
 }
 
 resource "oci_core_route_table" "main" {
-  compartment_id = var.compartment_id
-  vcn_id         = var.vcn_id == null ? data.oci_core_subnets.subnets.subnets[0].vcn_id : var.vcn_id
+  compartment_id = local.compartment_id
+  vcn_id         = local.vcn_id
 
   #Optional
   display_name  = var.display_name
@@ -44,6 +46,17 @@ resource "oci_core_route_table" "main" {
       network_entity_id = data.oci_core_service_gateways.sg[route_rules.key].service_gateways[0].id
       destination       = lookup(data.oci_core_services.all_oci_services[0].services[0], "cidr_block")
       destination_type  = "SERVICE_CIDR_BLOCK"
+      description       = lookup(route_rules.value, "description", "")
+    }
+  }
+
+  # rules to nat gateway
+  dynamic "route_rules" {
+    for_each = can(var.rules.ng_rules) ? { for idx, obj in var.rules.ng_rules : tostring(idx) => obj } : {}
+    content {
+      network_entity_id = data.oci_core_nat_gateways.ng[route_rules.key].nat_gateways[0].id
+      destination       = lookup(route_rules.value, "destination", "")
+      destination_type  = "CIDR_BLOCK"
       description       = lookup(route_rules.value, "description", "")
     }
   }

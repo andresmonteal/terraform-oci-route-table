@@ -1,13 +1,11 @@
-
-# Copyright (c) 2019, 2021, Oracle Corporation and/or affiliates.
+// Copyright (c) 2018, 2021, Oracle and/or its affiliates.
 
 variable "tenancy_ocid" {
-  description = "root compartment"
-  default     = "tenancy-id"
+  description = "(Required) (Updatable) The OCID of the root compartment."
+  type        = string
 }
 
-# subnet parameters
-
+# route table parameters
 variable "route_tables" {
   type = map(any)
 }
