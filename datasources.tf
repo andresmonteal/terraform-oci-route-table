@@ -77,11 +77,21 @@ data "oci_core_nat_gateways" "ng" {
   }
 }
 
+data "oci_core_subnets" "ip_subnet" {
+  for_each = can(var.rules.ip_rules) ? { for idx, obj in var.rules.ip_rules : tostring(idx) => obj } : {}
+  #Required
+  compartment_id = local.compartment_id
+
+  #Optional
+  display_name = each.value["subnet"]
+}
+
 data "oci_core_private_ips" "ip" {
   for_each = can(var.rules.ip_rules) ? { for idx, obj in var.rules.ip_rules : tostring(idx) => obj } : {}
 
   #Optional
   ip_address = each.value["ip"]
+  subnet_id  = data.oci_core_subnets.ip_subnet[0].subnets[each.key].id
 }
 
 data "oci_core_services" "all_oci_services" {
