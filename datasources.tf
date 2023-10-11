@@ -82,7 +82,6 @@ data "oci_core_private_ips" "ip" {
 
   #Optional
   ip_address = each.value["ip"]
-  subnet_id  = data.oci_core_subnets.subnets[0].subnets[0].id
 }
 
 data "oci_core_services" "all_oci_services" {
