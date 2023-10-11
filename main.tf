@@ -60,6 +60,17 @@ resource "oci_core_route_table" "main" {
       description       = lookup(route_rules.value, "description", "")
     }
   }
+
+  # rules to private ip
+  dynamic "route_rules" {
+    for_each = can(var.rules.ip_rules) ? { for idx, obj in var.rules.ip_rules : tostring(idx) => obj } : {}
+    content {
+      network_entity_id = data.oci_core_private_ips.ip[route_rules.key].private_ips[0].id
+      destination       = lookup(route_rules.value, "destination", "")
+      destination_type  = "CIDR_BLOCK"
+      description       = lookup(route_rules.value, "description", "")
+    }
+  }
 }
 
 resource "oci_core_route_table_attachment" "main" {
