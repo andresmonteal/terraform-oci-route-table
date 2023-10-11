@@ -18,7 +18,7 @@ data "oci_identity_compartments" "compartment" {
 }
 
 data "oci_core_subnets" "subnets" {
-  count = var.tenancy_ocid == null ? 0 : 1
+  count = var.vcn_id == null ? 1 : 0
   #Required
   compartment_id = local.compartment_id
 
@@ -44,7 +44,7 @@ data "oci_core_internet_gateways" "ig" {
 
   #Optional
   display_name = each.value["ig_name"]
-  vcn_id       = try(data.oci_core_subnets.subnets[0].subnets[0].vcn_id, var.vcn_id)
+  vcn_id       = local.vcn_id
 }
 
 data "oci_core_service_gateways" "sg" {
@@ -53,7 +53,7 @@ data "oci_core_service_gateways" "sg" {
   compartment_id = local.compartment_id
 
   #Optional
-  vcn_id = try(data.oci_core_subnets.subnets[0].subnets[0].vcn_id, var.vcn_id)
+  vcn_id = local.vcn_id
 
   #Optional
   filter {
@@ -68,7 +68,7 @@ data "oci_core_nat_gateways" "ng" {
   compartment_id = local.compartment_id
 
   #Optional
-  vcn_id = try(data.oci_core_subnets.subnets[0].subnets[0].vcn_id, var.vcn_id)
+  vcn_id = local.vcn_id
 
   #Optional
   filter {
