@@ -18,7 +18,7 @@ data "oci_identity_compartments" "compartment" {
 }
 
 data "oci_core_subnets" "subnets" {
-  count = var.vcn_id == null ? 1 : 0
+  count = can(var.subnet_name)
   #Required
   compartment_id = local.compartment_id
 
