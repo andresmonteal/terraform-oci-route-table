@@ -20,8 +20,8 @@ variable "compartment" {
 
 variable "subnet_name" {
   description = "(Required) The name of the subnet."
-  default     = ""
   type        = string
+  default     = null
 }
 
 variable "subnet_ids" {
