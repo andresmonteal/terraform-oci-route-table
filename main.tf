@@ -6,6 +6,7 @@ locals {
   merged_freeform_tags = merge(var.freeform_tags, local.default_freeform_tags)
   vcn_id               = try(data.oci_core_subnets.subnets[0].subnets[0].vcn_id, var.vcn_id)
   compartment_id       = try(data.oci_identity_compartments.compartment[0].compartments[0].id, var.compartment_id)
+  drg_compartment_id       = try(data.oci_identity_compartments.drg_compartment[0].compartments[0].id, var.drg_compartment_id)
 }
 
 resource "oci_core_route_table" "main" {

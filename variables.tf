@@ -18,6 +18,18 @@ variable "compartment" {
   default     = null
 }
 
+variable "drg_compartment_id" {
+  description = "drg compartment id"
+  type        = string
+  default     = null
+}
+
+variable "drg_compartment" {
+  description = "drg compartment name"
+  type        = string
+  default     = null
+}
+
 variable "subnet_name" {
   description = "(Required) The name of the subnet."
   type        = string
