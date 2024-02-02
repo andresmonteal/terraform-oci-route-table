@@ -18,7 +18,7 @@ data "oci_identity_compartments" "compartment" {
 }
 
 data "oci_identity_compartments" "drg_compartment" {
-  count = var.tenancy_ocid == null ? 0 : 1
+  count = var.drg_compartment == null ? 0 : 1
   #Required
   compartment_id            = var.tenancy_ocid
   access_level              = "ANY"
@@ -48,7 +48,7 @@ data "oci_core_subnets" "subnets" {
 data "oci_core_drgs" "drg" {
   for_each = can(var.rules.drg_rules) ? { for idx, obj in var.rules.drg_rules : tostring(idx) => obj } : {}
   #Required
-  compartment_id = local.compartment_id
+  compartment_id = local.drg_compartment_id
 
   filter {
     name   = "display_name"
