@@ -72,6 +72,16 @@ resource "oci_core_route_table" "main" {
       description       = lookup(route_rules.value, "description", "")
     }
   }
+  # rules to local peering gateway
+  dynamic "route_rules" {
+    for_each = can(var.rules.lpg_rules) ? { for idx, obj in var.rules.lpg_rules : tostring(idx) => obj } : {}
+    content {
+      network_entity_id = lookup(route_rules.value, "network_entity_id", "")
+      destination       = lookup(route_rules.value, "destination", "")
+      destination_type  = "CIDR_BLOCK"
+      description       = lookup(route_rules.value, "description", "")
+    }
+  }
 }
 
 resource "oci_core_route_table_attachment" "main" {

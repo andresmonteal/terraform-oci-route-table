@@ -71,3 +71,9 @@ variable "rules" {
   default     = {}
   type        = map(any)
 }
+
+variable "network_entity_id" {
+  description = "The OCID for the route rule's target. For information about the type of targets you can specify, see Route Tables."
+  default     = ""
+  type        = string
+}
